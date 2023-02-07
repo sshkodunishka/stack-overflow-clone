@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { User } from './users/users.entity';
+import { User } from './users/users.model';
 
 console.log(process.env)
 
