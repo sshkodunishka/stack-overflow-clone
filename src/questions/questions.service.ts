@@ -11,16 +11,16 @@ export class QuestionsService {
     ){}
 
     async findAll(): Promise<Question[]>{
-        const res = await this.questionRepository.find()
-        return res
+        const questions = await this.questionRepository.find()
+        return questions
     }
 
     async findAllAnswers(id: number): Promise<Question[]>{
         return await this.questionRepository.find({relations: {answers: true}, where: {id}})
     }
 
-    async remove(id: number): Promise<string>{
+    async remove(id: number): Promise<boolean>{
         await this.questionRepository.delete(id)
-        return 'Успешно'
+        return true
     }
 }

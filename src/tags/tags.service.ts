@@ -21,9 +21,9 @@ export class TagsService {
         return res
     }
 
-    async remove(id: number): Promise<string>{
+    async remove(id: number): Promise<boolean>{
         await this.tagRepository.delete(id)
-        return 'Успешно'
+        return true
     }
 
     async createTag(dto: CreateTagDto): Promise<Tag> {
@@ -35,8 +35,8 @@ export class TagsService {
         return await this.tagRepository.find({relations: {questions: true}, where: {id}})
     }
 
-    async editTag(id: number, dto: CreateTagDto): Promise<string>{
+    async editTag(id: number, dto: CreateTagDto): Promise<boolean>{
         await this.tagRepository.update(id, dto)
-        return 'Успешно'
+        return true
     } 
 }

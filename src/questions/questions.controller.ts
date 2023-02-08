@@ -18,7 +18,7 @@ export class QuestionsController {
 
     @ApiOperation({summary: 'Все ответы на вопрос'})
     @ApiResponse({status: 200, type: [Question]})
-    @Get('/answers/:id')
+    @Get('/:id/answers')
     getAnswers(@Param('id') id: number){
         return this.questionService.findAllAnswers(id)
     }

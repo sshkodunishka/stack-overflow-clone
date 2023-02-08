@@ -10,8 +10,8 @@ export class AnswersService {
         private answerRepository: Repository<Answer>
     ){}
 
-    async remove(id: number): Promise<string>{
+    async remove(id: number): Promise<boolean>{
         await this.answerRepository.delete(id)
-        return 'Успешно'
+        return true
     }
 }

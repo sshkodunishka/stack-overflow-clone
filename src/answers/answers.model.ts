@@ -6,7 +6,7 @@ import { Entity, PrimaryGeneratedColumn,CreateDateColumn, UpdateDateColumn, Many
 export class Answer{
     @ApiProperty({example: '1', description: 'Индефикатор'})
     @PrimaryGeneratedColumn()
-    id: Number;
+    id: number;
 
     @ManyToOne(() => Question, (question) => question.answers)
     question: Question
