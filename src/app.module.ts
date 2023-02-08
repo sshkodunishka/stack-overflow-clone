@@ -6,6 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { User } from './users/users.model';
+import { Tag } from './tags/tags.model';
+import { TagsModule } from './tags/tags.module';
+import { QuestionsController } from './questions/questions.controller';
+import { QuestionsModule } from './questions/questions.module';
+import { Question } from './questions/questions.model';
+import { AnswersModule } from './answers/answers.module';
+import { Answer } from './answers/answers.model';
 
 console.log(process.env)
 
@@ -21,10 +28,13 @@ console.log(process.env)
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User],
+      entities: [User,Tag,Question,Answer],
       synchronize: true
     }),
     UsersModule,
+    TagsModule,
+    QuestionsModule,
+    AnswersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
