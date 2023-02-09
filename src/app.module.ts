@@ -7,6 +7,12 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { User } from './users/users.entity';
 import { AuthModule } from './auth/auth.module';
+import { TagsModule } from './tags/tags.module';
+import { QuestionsModule } from './questions/questions.module';
+import { AnswersModule } from './answers/answers.module';
+import { Tag } from './tags/tags.model';
+import { Question } from './questions/questions.model';
+import { Answer } from './answers/answers.model';
 
 @Module({
   imports: [
@@ -20,11 +26,14 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User],
+      entities: [User,Tag,Question,Answer],
       synchronize: true
     }),
     UsersModule,
     AuthModule,
+    TagsModule,
+    QuestionsModule,
+    AnswersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
