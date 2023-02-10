@@ -1,13 +1,17 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
-/* eslint-disable prettier/prettier */
-export class  CreateUserDto{
-  @ApiProperty({example: 'hallsets', description: 'Логин'})
+export class CreateUserDto {
+  readonly id: number;
+
+  @ApiProperty({ example: 'Shkodunishka', description: 'Login' })
   readonly login: string;
-  @ApiProperty({example: '123456', description: 'ПарольЫ'})
+
+  @ApiProperty({ example: 11111, description: 'Password' })
   readonly password: string;
-  @ApiProperty({example: 'Кристина', description: 'Имя'})
+
+  @ApiProperty({ example: 'Kristina', description: 'First name' })
   readonly firstName: string;
-  @ApiProperty({example: 'Шкода', description: 'Фамилия'})
+
+  @ApiProperty({ example: 'Shkoda', description: 'Last name' })
   readonly lastName: string;
 }
