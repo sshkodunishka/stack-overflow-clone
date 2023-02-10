@@ -4,7 +4,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { TokensDto } from '../users/dto/tokens.dto';
-import { User } from 'src/users/users.entity';
+import { User } from 'src/users/users.model';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
 

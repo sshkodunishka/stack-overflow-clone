@@ -10,6 +10,6 @@ import { QuestionsService } from './questions.service';
 @Module({
   controllers: [QuestionsController],
   providers: [QuestionsService],
-  imports: [TypeOrmModule.forFeature([Question, Tag, Answer, User])]
+  imports: [TypeOrmModule.forFeature([Question, Tag, Answer, User])],
 })
 export class QuestionsModule {}
