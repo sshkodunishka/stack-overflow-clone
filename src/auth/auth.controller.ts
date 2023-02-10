@@ -1,22 +1,37 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
+import { TokensDto } from '../users/dto/tokens.dto';
+import { User } from 'src/users/users.model';
+import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
 
-@ApiTags('Авторизация')
+@ApiTags('Authorization')
 @Controller('auth')
 export class AuthController {
 
     constructor(private authService: AuthService) { }
 
+    @ApiOperation({summary: 'Login'})
+    @ApiResponse({status:200, type: TokensDto})
     @Post('/login')
-    login(@Body() userDto: CreateUserDto) {
-        return this.authService.login(userDto)
+    login(@Body() UserDto: LoginUserDto) {
+        return this.authService.login(UserDto)
     }
 
+    @ApiOperation({summary: 'Registration'})
+    @ApiResponse({status:200, type: User})
     @Post('/registration')
     registration(@Body() userDto: CreateUserDto){
         return this.authService.registration(userDto)
+    }
+
+    @ApiOperation({summary: 'Update refreshed tokens'})
+    @ApiResponse({status:200, type: RefreshTokenDto})
+    @Post('/refresh-token')
+    getRefreshedTokens(@Body() refreshTokenDto: RefreshTokenDto){
+       return this.authService.getRefreshedTokens(refreshTokenDto)
     }
 }

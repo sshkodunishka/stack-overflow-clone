@@ -16,6 +16,7 @@ services:
       - 7000:7000
     depends_on:
       - postgres
+      - redis_cache
     restart: always
     networks:
       - stackoverflow
@@ -33,7 +34,15 @@ services:
     restart: always
     networks:
       - stackoverflow
-      
+
+  redis_cache: 
+    container_name: redis_cache
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      - stackoverflow
+    
 volumes:
   pgdata:
 networks:

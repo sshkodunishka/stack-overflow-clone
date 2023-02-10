@@ -13,12 +13,14 @@ import { AnswersModule } from './answers/answers.module';
 import { Tag } from './tags/tags.model';
 import { Question } from './questions/questions.model';
 import { Answer } from './answers/answers.model';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`
     }),
+    
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -34,6 +36,7 @@ import { Answer } from './answers/answers.model';
     TagsModule,
     QuestionsModule,
     AnswersModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,21 +7,24 @@ import { ApiTags,ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './users.model';
 
 
-@ApiTags('Ответы')
+
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
 
     constructor(private usersService: UsersService) { }
 
-    @ApiOperation({summary: 'Создать пользователя'})
-    @ApiResponse({status: 200, type: User})
+
+    @ApiOperation({summary: 'Create user'})
+    @ApiResponse({status:200, type: User})
     @Post()
     create(@Body() createUserDto: CreateUserDto) {
         return this.usersService.createUser(createUserDto);
     }
 
-    @ApiOperation({summary: 'Получить пользователя'})
-    @ApiResponse({status: 200, type: User})
+
+    @ApiOperation({summary: 'Get all users'})
+    @ApiResponse({status:200, type: [User]})
     @UseGuards(JwtAuthGuard)
     @Get()
     getAll(){

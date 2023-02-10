@@ -6,18 +6,18 @@ import { CreateAnswerDto } from './dto/create-answer.dto';
 
 @Injectable()
 export class AnswersService {
-    constructor(
-        @InjectRepository(Answer)
-        private answerRepository: Repository<Answer>
-    ){}
+  constructor(
+    @InjectRepository(Answer)
+    private answerRepository: Repository<Answer>,
+  ) {}
 
-    async remove(id: number): Promise<boolean>{
-        await this.answerRepository.delete(id)
-        return true
-    }
+  async remove(id: number): Promise<boolean> {
+    await this.answerRepository.delete(id);
+    return true;
+  }
 
-    async edit(id: number, dto: CreateAnswerDto): Promise<boolean>{
-        await this.answerRepository.update(id, dto)
-        return true
-    }
+  async edit(id: number, dto: CreateAnswerDto): Promise<boolean> {
+    await this.answerRepository.update(id, dto);
+    return true;
+  }
 }

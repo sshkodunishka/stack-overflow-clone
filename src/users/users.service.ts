@@ -17,7 +17,7 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto) {
     const user = await this.usersRepository.create(dto);
-    this.usersRepository.save(user)
+     await this.usersRepository.save(user)
     return user;
   }
 
@@ -30,6 +30,15 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: {
         login: login
+      }
+    })
+    return user;
+  }
+
+  async getUserById(id: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: id
       }
     })
     return user;
