@@ -1,6 +1,8 @@
 import { Question } from "src/questions/questions.model";
 import { ApiProperty } from "@nestjs/swagger";
 import { Entity, PrimaryGeneratedColumn,CreateDateColumn, UpdateDateColumn, ManyToOne, Column } from "typeorm";
+import { User } from "src/users/users.model";
+
 
 @Entity()
 export class Answer{
@@ -10,6 +12,9 @@ export class Answer{
 
     @ManyToOne(() => Question, (question) => question.answers)
     question: Question
+
+    @ManyToOne(() => User, (user) => user.answers)
+    user: User
 
     @ApiProperty({example: '0', description: 'Рэйтинг'})
     @Column({default: 0})
