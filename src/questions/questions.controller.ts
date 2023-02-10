@@ -1,5 +1,6 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
 
@@ -29,5 +30,10 @@ export class QuestionsController {
     @Delete('/:id')
     remove(@Param('id') id: number){
         return this.questionService.remove(id)
+    }
+
+    @Put('/:id')
+    edit(@Param('id') id: number, dto: CreateQuestionDto){
+        return this.questionService.edit(id, dto)
     }
 }
