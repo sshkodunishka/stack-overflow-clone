@@ -13,4 +13,5 @@ export class CreateQuestionDto {
   readonly description: string;
   @ApiProperty({ example: '2', description: 'Номер ярлыка' })
   readonly tagId: number;
+  readonly userId: number; 
 }

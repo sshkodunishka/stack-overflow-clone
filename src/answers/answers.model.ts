@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Column,
+  ManyToMany
 } from 'typeorm';
 import { User } from 'src/users/users.model';
+import { AnswerRating } from './answersRating.model';
 
 @Entity()
 export class Answer {
