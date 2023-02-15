@@ -10,7 +10,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
+import { QuestionRating } from './questionsRating.model';
 
 @Entity()
 export class Question {

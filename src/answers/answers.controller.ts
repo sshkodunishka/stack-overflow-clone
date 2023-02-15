@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Answer } from './answers.model';
 import { AnswersService } from './answers.service';
@@ -19,5 +19,10 @@ export class AnswersController {
   @Put('/:id')
   edit(@Param('id') id: number, @Body() dto: CreateAnswerDto) {
     return this.answerService.edit(id, dto);
+  }
+
+  @Post()
+  add(@Body() dto: CreateAnswerDto){
+    return this.answerService.add(dto)
   }
 }

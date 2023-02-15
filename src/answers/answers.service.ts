@@ -20,4 +20,9 @@ export class AnswersService {
     await this.answerRepository.update(id, dto);
     return true;
   }
+
+  async add(dto: CreateAnswerDto): Promise<Answer>{
+    let res = await this.answerRepository.save(dto)
+    return res
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
@@ -33,5 +33,15 @@ export class QuestionsController {
   @Put('/:id')
   edit(@Param('id') id: number, dto: CreateQuestionDto) {
     return this.questionService.edit(id, dto);
+  }
+
+  @Post()
+  add(@Body() dto: CreateQuestionDto){
+    return this.questionService.add(dto)
+  }
+
+  @Get('/sort')
+  sortBytags(){
+    return this.questionService.sortBytags()
   }
 }
