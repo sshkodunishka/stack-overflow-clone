@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateAnswerDto } from 'src/answers/dto/create-answer.dto';
+import { TagsService } from 'src/tags/tags.service';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
@@ -10,6 +11,8 @@ export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
+    private userService: UsersService,
+    private tagService: TagsService
   ) {}
 
   async findAll(): Promise<Question[]> {
@@ -24,18 +27,24 @@ export class QuestionsService {
     });
   }
 
+  async findOne(id: number): Promise<Question>{
+    return await this.questionRepository.findOneBy({ id })
+  }
+
   async remove(id: number): Promise<boolean> {
     await this.questionRepository.delete(id);
     return true;
   }
 
   async edit(id: number, dto: CreateQuestionDto): Promise<boolean> {
-    await this.questionRepository.update(id, dto);
+    await this.questionRepository.update({ id }, {...dto});
     return true;
   }
 
   async add(dto: CreateQuestionDto): Promise<Question>{
-    const res = await this.questionRepository.save(dto);
+    const user = await this.userService.getUserById(dto.userId)
+    const tag = await this.tagService.findOne(dto.tagId)
+    const res = await this.questionRepository.save({...dto, user, tag});
     return res;
   }
 

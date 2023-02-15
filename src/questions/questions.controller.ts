@@ -31,7 +31,7 @@ export class QuestionsController {
   }
 
   @Put('/:id')
-  edit(@Param('id') id: number, dto: CreateQuestionDto) {
+  edit(@Param('id') id: number, @Body() dto: CreateQuestionDto) {
     return this.questionService.edit(id, dto);
   }
 
