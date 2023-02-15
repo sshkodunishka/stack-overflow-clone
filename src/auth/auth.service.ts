@@ -13,6 +13,8 @@ import { RedisClient } from '../redis/redis.client';
 import { v4 as uuidv4 } from 'uuid';
 import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { RolesService } from '../roles/roles.service';
+import { Roles } from 'src/roles/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private cacheManager: RedisClient,
+    private rolesService: RolesService,
   ) {}
   async login(userDto: LoginUserDto) {
     const user = await this.validateUser(userDto);
@@ -36,11 +39,22 @@ export class AuthService {
     }
 
     const hashPassword = await bcrypt.hash(userDto.password, 5);
-    const user = await this.usersService.createUser({
-      ...userDto,
-      password: hashPassword,
-    });
+    const role = await this.rolesService.getRoleByName(Roles.USER);
+    const user = await this.usersService.createUser(
+      {
+        ...userDto,
+        password: hashPassword,
+      },
+      role,
+    );
     return this.generateTokens(user);
+  }
+
+  async deleteRefreshToken(id: number) {
+    const refreshToken = await this.cacheManager.get(id.toString());
+    this.cacheManager.del(id.toString());
+    this.cacheManager.del(refreshToken.toString());
+    return;
   }
 
   async getRefreshedTokens(refreshTokenDto: RefreshTokenDto) {
@@ -60,9 +74,14 @@ export class AuthService {
   }
 
   private async generateTokens(user: User) {
-    const payload = { login: user.login, id: user.id };
+    const payload = {
+      login: user.login,
+      id: user.id,
+      roleName: user.role.roleName,
+    };
     const refresh_token = uuidv4();
     await this.cacheManager.set(refresh_token, user.id, {});
+    await this.cacheManager.set(user.id.toString(), refresh_token, {});
     return {
       acsess_token: this.jwtService.sign(payload),
       refresh_token: refresh_token,

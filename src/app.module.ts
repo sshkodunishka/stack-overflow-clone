@@ -14,6 +14,8 @@ import { Tag } from './tags/tags.model';
 import { Question } from './questions/questions.model';
 import { Answer } from './answers/answers.model';
 import { RedisModule } from './redis/redis.module';
+import { RolesModule } from './roles/roles.module';
+import { Role } from './roles/roles.model';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { RedisModule } from './redis/redis.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User,Tag,Question,Answer],
+      entities: [User,Tag,Question,Answer, Role],
       synchronize: true
     }),
     UsersModule,
@@ -37,6 +39,7 @@ import { RedisModule } from './redis/redis.module';
     QuestionsModule,
     AnswersModule,
     RedisModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

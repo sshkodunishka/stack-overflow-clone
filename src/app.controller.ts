@@ -2,7 +2,6 @@ import { Controller, Get } from '@nestjs/common';
 import {
   ApiHideProperty,
   ApiOperation,
-  ApiProperty,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';

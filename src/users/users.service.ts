@@ -4,6 +4,7 @@ import { User } from './users.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Role } from 'src/roles/roles.model';
 
 export type user = User
 
@@ -15,14 +16,21 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) { }
 
-  async createUser(dto: CreateUserDto) {
-    const user = await this.usersRepository.create(dto);
+  async createUser(dto: CreateUserDto, role: Role) {
+    const user = await this.usersRepository.create({
+      ...dto,
+      role
+    });
      await this.usersRepository.save(user)
     return user;
   }
 
   async getAllUsers() {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({
+      relations: {
+        role: true
+      }
+    });
     return users;
   }
 
@@ -30,6 +38,9 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: {
         login: login
+      },
+      relations: {
+        role: true
       }
     })
     return user;
@@ -39,6 +50,9 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: {
         id: id
+      },
+      relations: {
+        role: true
       }
     })
     return user;
