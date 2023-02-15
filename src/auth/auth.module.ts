@@ -5,6 +5,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { RedisModule } from '../redis/redis.module';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { RedisModule } from '../redis/redis.module';
         expiresIn: '24h'
       }
     }),
-    RedisModule
+    RedisModule,
+    RolesModule
   ],
   exports: [
     AuthService,

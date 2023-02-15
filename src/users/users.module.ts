@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { Question } from 'src/questions/questions.model';
+import { Role } from '../roles/roles.model';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Question]),
+    TypeOrmModule.forFeature([User, Question, Role]),
     forwardRef(() => AuthModule),
 
   ],

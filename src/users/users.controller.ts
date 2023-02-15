@@ -15,16 +15,10 @@ export class UsersController {
     constructor(private usersService: UsersService) { }
 
 
-    @ApiOperation({summary: 'Create user'})
-    @ApiResponse({status:200, type: User})
-    @Post()
-    create(@Body() createUserDto: CreateUserDto) {
-        return this.usersService.createUser(createUserDto);
-    }
-
-
     @ApiOperation({summary: 'Get all users'})
     @ApiResponse({status:200, type: [User]})
+    //@UserGuards(RolesGuard)
+    //@Roles(Roles.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Get()
     getAll(){

@@ -2,33 +2,37 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Answer } from 'src/answers/answers.model';
 import { Question } from 'src/questions/questions.model';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Role } from '../roles/roles.model';
 
 @Entity()
 export class User {
-  @ApiProperty({example: '1', description: 'Индефикатор'})
+  @ApiProperty({ example: '1', description: 'Индефикатор' })
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({example: 'hallsets', description: 'Логин'})
-  @Column({unique: true,nullable: false})
+  @ApiProperty({ example: 'hallsets', description: 'Логин' })
+  @Column({ unique: true, nullable: false })
   login: string;
 
-  @ApiProperty({example: '123456', description: 'ПарольЫ'})
-  @Column({nullable: false})
+  @ApiProperty({ example: '123456', description: 'ПарольЫ' })
+  @Column({ nullable: false })
   password: string;
 
-  @ApiProperty({example: 'Кристина', description: 'Имя'})
-  @Column({default: "firstName"})
+  @ApiProperty({ example: 'Кристина', description: 'Имя' })
+  @Column({ default: "firstName" })
   firstName: string;
 
-  @ApiProperty({example: 'Шкода', description: 'Фамилия'})
-  @Column({default: "lastName"})
+  @ApiProperty({ example: 'Шкода', description: 'Фамилия' })
+  @Column({ default: "lastName" })
   lastName: string;
 
   @OneToMany(() => Question, (question) => question.user)
   questions: Question[]
 
   @OneToMany(() => Answer, (answer) => answer.user)
-  answers: Answer[] 
+  answers: Answer[]
+
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
 }
