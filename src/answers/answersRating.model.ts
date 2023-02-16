@@ -1,19 +1,31 @@
 import { User } from "src/users/users.model";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ForeignKeyMetadata } from "typeorm/metadata/ForeignKeyMetadata";
+import { Column, Entity, ManyToOne, PrimaryColumn, JoinColumn } from "typeorm";
 import { Answer } from "./answers.model";
 
 @Entity()
 export class AnswerRating{
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
+    @PrimaryColumn({ name: 'user_id' })
     userId: number;
-    
-    @Column()
+  
+    @PrimaryColumn({ name: 'answer_id' })
     answerId: number;
 
+    @ManyToOne(
+        () => User,
+        user => user.questions,
+        {onDelete: 'NO ACTION', onUpdate: 'NO ACTION'}
+      )
+    @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+    user: User[];
+
+    @ManyToOne(
+        () => Answer,
+        answer => answer.user,
+        {onDelete: 'NO ACTION', onUpdate: 'NO ACTION'}
+    )
+    @JoinColumn([{ name: 'answer_id', referencedColumnName: 'id' }])
+    answer: Answer[];
+
     @Column({default: 0})
-    rate: number
+    rating: number;
 }

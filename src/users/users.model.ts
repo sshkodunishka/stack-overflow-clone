@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Answer } from 'src/answers/answers.model';
 import { Question } from 'src/questions/questions.model';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { Role } from '../roles/roles.model';
 
 @Entity()
@@ -27,10 +27,32 @@ export class User {
   @Column({ default: "lastName" })
   lastName: string;
 
-  @OneToMany(() => Question, (question) => question.user)
+  @ManyToMany(() => Question, (question) => question.user)
+  @JoinTable({
+    name: 'rating_question',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'question_id',
+      referencedColumnName: 'id',
+    },
+  })
   questions: Question[]
 
-  @OneToMany(() => Answer, (answer) => answer.user)
+  @ManyToMany(() => Answer, (answer) => answer.user)
+  @JoinTable({
+    name: 'rating_answer',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'answer_id',
+      referencedColumnName: 'id',
+    },
+  })
   answers: Answer[]
 
   @ManyToOne(() => Role, (role) => role.users)

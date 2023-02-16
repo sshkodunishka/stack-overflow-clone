@@ -1,4 +1,3 @@
-import { Question } from 'src/questions/questions.model';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
@@ -11,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/users/users.model';
 import { AnswerRating } from './answersRating.model';
+import { Question } from 'src/questions/questions.model';
 
 @Entity()
 export class Answer {

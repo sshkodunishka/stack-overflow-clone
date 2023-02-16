@@ -1,8 +1,9 @@
-import { Controller, Delete, Get, Param, Post, Put, Body } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Body, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
+import { QuestionRating } from './questionsRating.model';
 
 @ApiTags('Вопросы')
 @Controller('questions')
@@ -43,5 +44,10 @@ export class QuestionsController {
   @Get('/sort')
   sortBytags(){
     return this.questionService.sortBytags()
+  }
+
+  @Post('/:id/vote')
+  voteQuestions(@Param('id') id: number, @Query('rating') rating: string){
+    return this.questionService.voteQuestion(id, rating)
   }
 }
