@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Answer } from './answers.model';
 import { AnswersService } from './answers.service';
@@ -24,5 +24,10 @@ export class AnswersController {
   @Post()
   add(@Body() dto: CreateAnswerDto){
     return this.answerService.add(dto)
+  }
+
+  @Post('/:id/vote')
+  voteQuestions(@Param('id') id: number, @Query('rating') rating: string){
+    return this.answerService.voteAnswer(id, rating)
   }
 }

@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { QuestionRating } from './questionsRating.model';
 
@@ -26,12 +27,11 @@ export class Question {
   @OneToMany(() => Answer, (answer) => answer.question)
   answers: Answer[];
 
-  @ManyToOne(() => User, (user) => user.questions)
+  @ManyToMany(() => User, (user) => user.questions)
   user: User;
 
-  @ApiProperty({ example: '0', description: 'Рэйтинг' })
-  @Column({ default: 0 })
-  rating: number;
+  @Column()
+  createUserId: number;
 
   @ApiProperty({ example: 'Заголовок', description: 'Заголовок вопроса' })
   @Column({ default: 'title' })

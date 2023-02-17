@@ -1,5 +1,6 @@
-import { Controller, Delete, Get, Param, Post, Put, Body } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Body, Query, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
@@ -31,7 +32,7 @@ export class QuestionsController {
   }
 
   @Put('/:id')
-  edit(@Param('id') id: number, dto: CreateQuestionDto) {
+  edit(@Param('id') id: number, @Body() dto: CreateQuestionDto) {
     return this.questionService.edit(id, dto);
   }
 
@@ -43,5 +44,11 @@ export class QuestionsController {
   @Get('/sort')
   sortBytags(){
     return this.questionService.sortBytags()
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/:id/vote')
+  voteQuestions(@Param('id') id: number, @Query('rating') rating: string, @Req() user: any){
+    return this.questionService.voteQuestion(user.user.id, id, rating)
   }
 }
