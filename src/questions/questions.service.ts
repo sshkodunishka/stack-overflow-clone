@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TagsService } from 'src/tags/tags.service';
 import { Repository } from 'typeorm';
@@ -13,7 +14,8 @@ export class QuestionsService {
     private questionRepository: Repository<Question>,
     @InjectRepository(QuestionRating)
     private ratingRepository: Repository<QuestionRating>,
-    private tagService: TagsService
+    private tagService: TagsService,
+    private jwtService: JwtService,
   ) {}
 
   async findAll(): Promise<Question[]> {
@@ -52,23 +54,25 @@ export class QuestionsService {
     return await this.questionRepository.find({order: { tag: { 'id' : 'ASC'}}})
   }
 
-  async voteQuestion(id: number, rating: string): Promise<boolean>{
-    const user = 1
+  async voteQuestion(userId: number, id: number, rating: string): Promise<boolean>{
     const vote = JSON.parse(rating.toLowerCase()) ? 1 : -1
-    const event = await this.ratingRepository.findOneBy({userId: user, questionId: id})
+    const event = await this.ratingRepository.findOneBy({userId, questionId: id})
     if(!event){
-      await this.ratingRepository.save({userId: user, questionId: id, rating: vote})
+      await this.ratingRepository.save({userId, questionId: id, rating: vote})
       return true
     }
-    else if(event.rating == 1 && vote == -1){ 
+    
+    if(event.rating == 1 && vote == -1){ 
       await this.ratingRepository.save({...event ,rating: 0})
       return true
     }
-    else if(event.rating == -1 && vote == 1 ){
+    
+    if(event.rating == -1 && vote == 1 ){
       await this.ratingRepository.save({...event, rating: 0})
       return true
     }
-    else if(event.rating == 0){
+    
+    if(event.rating == 0){
       await this.ratingRepository.save({...event, rating: vote})
       return true
     }

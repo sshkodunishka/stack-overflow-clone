@@ -1,9 +1,9 @@
-import { Controller, Delete, Get, Param, Post, Put, Body, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Body, Query, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
-import { QuestionRating } from './questionsRating.model';
 
 @ApiTags('Вопросы')
 @Controller('questions')
@@ -46,8 +46,9 @@ export class QuestionsController {
     return this.questionService.sortBytags()
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/:id/vote')
-  voteQuestions(@Param('id') id: number, @Query('rating') rating: string){
-    return this.questionService.voteQuestion(id, rating)
+  voteQuestions(@Param('id') id: number, @Query('rating') rating: string, @Req() user: any){
+    return this.questionService.voteQuestion(user.user.id, id, rating)
   }
 }

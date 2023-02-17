@@ -43,15 +43,18 @@ export class AnswersService {
       await this.answeRatingRepository.save({userId: user, answerId: id, rating: vote})
       return true
     }
-    else if(event.rating == 1 && vote == -1){ 
+    
+    if(event.rating == 1 && vote == -1){ 
       await this.answeRatingRepository.save({...event ,rating: 0})
       return true
     }
-    else if(event.rating == -1 && vote == 1 ){
+    
+    if(event.rating == -1 && vote == 1 ){
       await this.answeRatingRepository.save({...event, rating: 0})
       return true
     }
-    else if(event.rating == 0){
+    
+    if(event.rating == 0){
       await this.answeRatingRepository.save({...event, rating: vote})
       return true
     }

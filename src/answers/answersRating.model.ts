@@ -2,7 +2,7 @@ import { User } from "src/users/users.model";
 import { Column, Entity, ManyToOne, PrimaryColumn, JoinColumn } from "typeorm";
 import { Answer } from "./answers.model";
 
-@Entity()
+@Entity('rating_answer')
 export class AnswerRating{
     @PrimaryColumn({ name: 'user_id' })
     userId: number;

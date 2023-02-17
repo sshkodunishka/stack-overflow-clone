@@ -33,7 +33,6 @@ import { AnswerRating } from './answers/answersRating.model';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [Question, User, Tag, Answer, Role, QuestionRating, AnswerRating],
-      //migrations: ['dist/migrations/*.ts'],
       synchronize: true,
     }),
     UsersModule,
