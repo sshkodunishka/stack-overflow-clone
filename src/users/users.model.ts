@@ -27,19 +27,8 @@ export class User {
   @Column({ default: "lastName" })
   lastName: string;
 
-  @ManyToMany(() => Question, (question) => question.user)
-  @JoinTable({
-    name: 'rating_question',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'question_id',
-      referencedColumnName: 'id',
-    },
-  })
-  questions: Question[]
+ @OneToMany(()=>Question, (question)=>question.user)
+ questions: Question[]
 
   @ManyToMany(() => Answer, (answer) => answer.user)
   @JoinTable({

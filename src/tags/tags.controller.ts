@@ -6,17 +6,22 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Tag } from './tags.model';
 import { TagsService } from './tags.service';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { Roles } from 'src/roles/roles.decorator';
+import { RolesGuard } from 'src/roles/roles.guards';
 
 @ApiTags('Ярлыки')
 @Controller('tags')
 export class TagsController {
   constructor(private tagsService: TagsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Все ярлыки' })
   @ApiResponse({ status: 200, type: [Tag] })
   @Get()
@@ -24,6 +29,9 @@ export class TagsController {
     return this.tagsService.findAll();
   }
 
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Создать ярлык' })
   @ApiResponse({ status: 200, type: Tag })
   @Post()
@@ -31,6 +39,9 @@ export class TagsController {
     return this.tagsService.createTag(tagDto);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Удалить ярлык' })
   @ApiResponse({ status: 200, type: Tag })
   @Delete('/:id')
@@ -38,6 +49,7 @@ export class TagsController {
     return this.tagsService.remove(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Получить один ярлык' })
   @ApiResponse({ status: 200, type: Tag })
   @Get('/:id')
@@ -45,6 +57,7 @@ export class TagsController {
     return this.tagsService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Все вопросы по одному ярлыку' })
   @ApiResponse({ status: 200, type: [Tag] })
   @Get('/questions/:id')
@@ -52,6 +65,9 @@ export class TagsController {
     return this.tagsService.findAllQuestion(id);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Редактировать ярлык' })
   @ApiResponse({ status: 200, type: Tag })
   @Put('/:id')

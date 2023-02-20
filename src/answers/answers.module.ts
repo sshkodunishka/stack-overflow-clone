@@ -8,10 +8,17 @@ import { AnswersController } from './answers.controller';
 import { Answer } from './answers.model';
 import { AnswersService } from './answers.service';
 import { AnswerRating } from './answersRating.model';
+import { Role } from '../roles/roles.model';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [AnswersController],
   providers: [AnswersService],
-  imports: [TypeOrmModule.forFeature([Answer, Question, User, AnswerRating]), QuestionsModule, UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Answer, Question, User, AnswerRating, Role]),
+    QuestionsModule,
+    UsersModule,
+    AuthModule,
+  ],
 })
 export class AnswersModule {}
