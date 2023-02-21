@@ -9,11 +9,25 @@ import { QuestionsController } from './questions.controller';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
 import { QuestionRating } from './questionsRating.model';
+import { Role } from '../roles/roles.model';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Question, Tag, Answer, User, QuestionRating]), TagsModule, AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      Question,
+      Tag,
+      Answer,
+      User,
+      QuestionRating,
+      Role,
+    ]),
+    TagsModule,
+    AuthModule,
+    RolesModule,
+  ],
   providers: [QuestionsService],
   controllers: [QuestionsController],
-  exports: [QuestionsService]
+  exports: [QuestionsService],
 })
 export class QuestionsModule {}

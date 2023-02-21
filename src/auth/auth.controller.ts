@@ -40,10 +40,8 @@ export class AuthController {
     @ApiOperation({summary: 'Logout'})
     @ApiResponse({status:200})
     @Get('/logout')
-    logout(@Req() user: any){
-        const id =  user.user.id;
-        console.log(id);
-        console.log("------- User exited");
+    logout(@Req() req: any){
+        const id =  req.user.id;
        return this.authService.deleteRefreshToken(id);
     }
 }

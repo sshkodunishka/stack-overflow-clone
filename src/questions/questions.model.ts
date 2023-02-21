@@ -27,11 +27,8 @@ export class Question {
   @OneToMany(() => Answer, (answer) => answer.question)
   answers: Answer[];
 
-  @ManyToMany(() => User, (user) => user.questions)
+  @ManyToOne(() => User, (user) => user.questions)
   user: User;
-
-  @Column()
-  createUserId: number;
 
   @ApiProperty({ example: 'Заголовок', description: 'Заголовок вопроса' })
   @Column({ default: 'title' })

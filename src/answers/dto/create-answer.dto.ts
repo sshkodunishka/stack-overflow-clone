@@ -5,5 +5,5 @@ export class CreateAnswerDto {
   readonly description: string;
   @ApiProperty({ example: '2', description: 'Номер вопроса' })
   readonly questionId: number;
-  readonly userId: number; 
+  readonly userId: number;
 }
