@@ -8,7 +8,6 @@ import { User } from 'src/users/users.model';
 import { QuestionsController } from './questions.controller';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
-import { QuestionRating } from './questionsRating.model';
 import { Role } from '../roles/roles.model';
 import { RolesModule } from '../roles/roles.module';
 
@@ -19,7 +18,6 @@ import { RolesModule } from '../roles/roles.module';
       Tag,
       Answer,
       User,
-      QuestionRating,
       Role,
     ]),
     TagsModule,

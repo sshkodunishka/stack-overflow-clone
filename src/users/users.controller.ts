@@ -14,8 +14,6 @@ export class UsersController {
 
     constructor(private usersService: UsersService) { }
 
-    
-
     @ApiOperation({summary: 'Get all users'})
     @ApiResponse({status:200, type: [User]})
     @UseGuards(RolesGuard)

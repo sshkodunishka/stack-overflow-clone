@@ -6,15 +6,12 @@ import { TagsService } from 'src/tags/tags.service';
 import { Repository } from 'typeorm';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
-import { QuestionRating } from './questionsRating.model';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
-    @InjectRepository(QuestionRating)
-    private ratingRepository: Repository<QuestionRating>,
     private tagService: TagsService,
     // private usersService: UsersService,
     private jwtService: JwtService,
@@ -105,33 +102,30 @@ export class QuestionsService {
     rating: string,
   ): Promise<boolean> {
     const vote = JSON.parse(rating.toLowerCase()) ? 1 : -1;
-    const event = await this.ratingRepository.findOneBy({
-      userId,
-      questionId: id,
-    });
-    if (!event) {
-      await this.ratingRepository.save({
-        userId,
-        questionId: id,
-        rating: vote,
-      });
+    const event = await this.questionRepository.query(`SELECT * FROM question WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`);
+    
+    if (!event.length) {
+      await this.questionRepository.query(`UPDATE question SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`);
       return true;
     }
 
+    /*
     if (event.rating == 1 && vote == -1) {
-      await this.ratingRepository.save({ ...event, rating: 0 });
+      await this.questionRepository.save({ ...event, rating: 0 });
       return true;
     }
 
     if (event.rating == -1 && vote == 1) {
-      await this.ratingRepository.save({ ...event, rating: 0 });
+      await this.questionRepository.save({ ...event, rating: 0 });
       return true;
     }
 
     if (event.rating == 0) {
-      await this.ratingRepository.save({ ...event, rating: vote });
+      await this.questionRepository.save({ ...event, rating: vote });
       return true;
     }
+    */
     return false;
   }
+
 }
