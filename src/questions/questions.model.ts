@@ -32,8 +32,6 @@ export class Question {
 
   @Column({
     type: 'jsonb',
-    array: false,
-    default: () => "'[]'",
     nullable: false,
   })
   ratingArr: Array<{ userId: string; vote: string }>;

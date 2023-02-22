@@ -27,8 +27,11 @@ export class Answer {
   @Column({ default: 0 })
   rating: number;
 
-  @Column('jsonb', { nullable: false, default: {} })
-  ratingArr: string;
+  @Column({
+    type: 'jsonb',
+    nullable: false,
+  })
+  ratingArr: Array<{ userId: string; vote: string }>;
 
   @ApiProperty({ example: 'Ответ', description: 'Ответ на вопрос' })
   @Column({ default: 'description' })
