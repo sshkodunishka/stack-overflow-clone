@@ -7,7 +7,6 @@ import { UsersModule } from 'src/users/users.module';
 import { AnswersController } from './answers.controller';
 import { Answer } from './answers.model';
 import { AnswersService } from './answers.service';
-import { AnswerRating } from './answersRating.model';
 import { Role } from '../roles/roles.model';
 import { AuthModule } from '../auth/auth.module';
 
@@ -15,7 +14,7 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [AnswersController],
   providers: [AnswersService],
   imports: [
-    TypeOrmModule.forFeature([Answer, Question, User, AnswerRating, Role]),
+    TypeOrmModule.forFeature([Answer, Question, User, Role]),
     QuestionsModule,
     UsersModule,
     AuthModule,

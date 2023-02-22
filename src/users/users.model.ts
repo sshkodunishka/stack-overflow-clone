@@ -27,21 +27,10 @@ export class User {
   @Column({ default: "lastName" })
   lastName: string;
 
- @OneToMany(()=>Question, (question)=>question.user)
- questions: Question[]
+  @OneToMany(()=>Question, (question)=>question.user)
+  questions: Question[]
 
-  @ManyToMany(() => Answer, (answer) => answer.user)
-  @JoinTable({
-    name: 'rating_answer',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'answer_id',
-      referencedColumnName: 'id',
-    },
-  })
+  @OneToMany(()=>Answer, (answer)=>answer.user)
   answers: Answer[]
 
   @ManyToOne(() => Role, (role) => role.users)

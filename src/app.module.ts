@@ -16,8 +16,6 @@ import { RolesModule } from './roles/roles.module';
 import { Question } from './questions/questions.model';
 import { Answer } from './answers/answers.model';
 import { Role } from './roles/roles.model';
-import { QuestionRating } from './questions/questionsRating.model';
-import { AnswerRating } from './answers/answersRating.model';
 
 
 @Module({
@@ -32,7 +30,7 @@ import { AnswerRating } from './answers/answersRating.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [Question, User, Tag, Answer, Role, QuestionRating, AnswerRating],
+      entities: [Question, User, Tag, Answer, Role],
       synchronize: true,
     }),
     UsersModule,

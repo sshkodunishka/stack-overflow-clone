@@ -4,7 +4,6 @@ import { QuestionsService } from 'src/questions/questions.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Answer } from './answers.model';
-import { AnswerRating } from './answersRating.model';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 
 @Injectable()
@@ -12,8 +11,6 @@ export class AnswersService {
   constructor(
     @InjectRepository(Answer)
     private answerRepository: Repository<Answer>,
-    @InjectRepository(AnswerRating)
-    private answeRatingRepository: Repository<AnswerRating>,
     private questionService: QuestionsService,
     private userService: UsersService,
   ) {}
@@ -59,22 +56,17 @@ export class AnswersService {
     return res;
   }
 
-  async voteAnswer(id: number, rating: string): Promise<boolean> {
+  async voteAnswer(userId: number, id: number, rating: string): Promise<boolean> {
     const user = 1;
     const vote = JSON.parse(rating.toLowerCase()) ? 1 : -1;
-    const event = await this.answeRatingRepository.findOneBy({
-      userId: user,
-      answerId: id,
-    });
-    if (!event) {
-      await this.answeRatingRepository.save({
-        userId: user,
-        answerId: id,
-        rating: vote,
-      });
+
+    const event = await this.answerRepository.query(`SELECT * FROM answer WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`);
+    
+    if (!event.length) {
+      await this.answerRepository.query(`UPDATE answer SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`);
       return true;
     }
-
+    /*
     if (event.rating == 1 && vote == -1) {
       await this.answeRatingRepository.save({ ...event, rating: 0 });
       return true;
@@ -90,5 +82,7 @@ export class AnswersService {
       return true;
     }
     return false;
+  }
+  */
   }
 }

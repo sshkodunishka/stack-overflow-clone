@@ -9,11 +9,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
+  OneToMany
 } from 'typeorm';
-import { QuestionRating } from './questionsRating.model';
 
 @Entity()
 export class Question {
@@ -29,6 +26,17 @@ export class Question {
 
   @ManyToOne(() => User, (user) => user.questions)
   user: User;
+
+  @Column({default : 0})
+  rating: number;
+
+  @Column(({
+    type: 'jsonb',
+    array: false,
+    default: () => "'[]'",
+    nullable: false,
+  }))
+  ratingArr: Array<{ userId: string, vote: string }>;
 
   @ApiProperty({ example: 'Заголовок', description: 'Заголовок вопроса' })
   @Column({ default: 'title' })

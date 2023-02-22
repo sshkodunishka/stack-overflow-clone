@@ -46,7 +46,11 @@ export class AnswersController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/:id/vote')
-  voteQuestions(@Param('id') id: number, @Query('rating') rating: string) {
-    return this.answerService.voteAnswer(id, rating);
+  voteAnswer(
+    @Param('id') id: number,
+    @Query('rating') rating: string,
+    @Req() user: any
+  ){
+    return this.answerService.voteAnswer(user.user.id, id, rating);
   }
 }

@@ -6,10 +6,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Column,
-  ManyToMany,
+  ManyToMany
 } from 'typeorm';
 import { User } from 'src/users/users.model';
-import { AnswerRating } from './answersRating.model';
 import { Question } from 'src/questions/questions.model';
 
 @Entity()
@@ -27,6 +26,9 @@ export class Answer {
   @ApiProperty({ example: '0', description: 'Рэйтинг' })
   @Column({ default: 0 })
   rating: number;
+
+  @Column('jsonb', { nullable: false, default: {} })
+  ratingArr: string;
 
   @ApiProperty({ example: 'Ответ', description: 'Ответ на вопрос' })
   @Column({ default: 'description' })
