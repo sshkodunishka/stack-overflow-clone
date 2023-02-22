@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -15,6 +16,7 @@ import { TagsService } from './tags.service';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { RolesGuard } from 'src/roles/roles.guards';
+import { title } from 'process';
 
 @ApiTags('Ярлыки')
 @Controller('tags')
@@ -57,9 +59,9 @@ export class TagsController {
 
   @ApiOperation({ summary: 'Все вопросы по одному ярлыку' })
   @ApiResponse({ status: 200, type: [Tag] })
-  @Get('/questions/:id')
-  getQuestions(@Param('id') id: number) {
-    return this.tagsService.findAllQuestion(id);
+  @Get('/questions/:title')
+  getQuestions(@Param('title') title: string) {
+    return this.tagsService.findAllQuestion(title);
   }
 
   @UseGuards(RolesGuard)

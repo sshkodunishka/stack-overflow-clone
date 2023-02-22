@@ -31,10 +31,10 @@ export class TagsService {
     return res;
   }
 
-  async findAllQuestion(id: number): Promise<Tag[]> {
+  async findAllQuestion(title: string): Promise<Tag[]> {
     return await this.tagRepository.find({
       relations: { questions: true },
-      where: { id },
+      where: { title },
     });
   }
 
