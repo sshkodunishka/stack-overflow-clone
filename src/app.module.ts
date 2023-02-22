@@ -5,33 +5,32 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { User } from './users/users.model';
 import { AuthModule } from './auth/auth.module';
 import { TagsModule } from './tags/tags.module';
 import { QuestionsModule } from './questions/questions.module';
 import { AnswersModule } from './answers/answers.module';
-import { Tag } from './tags/tags.model';
 import { RedisModule } from './redis/redis.module';
 import { RolesModule } from './roles/roles.module';
-import { Question } from './questions/questions.model';
-import { Answer } from './answers/answers.model';
-import { Role } from './roles/roles.model';
-
+import { AddColumnTag1677060963784 } from 'config/migrations/1677060963784-AddColumnTag';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: `.${process.env.NODE_ENV}.env`
-    }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities: [Question, User, Tag, Answer, Role],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule.forRoot({
+        envFilePath: `.${process.env.NODE_ENV}.env`
+      })],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('POSTGRES_HOST'),
+        port: configService.get('POSTGRES_PORT'),
+        username: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
+        entities: [],
+        autoLoadEntities: true,
+        migrations: [AddColumnTag1677060963784]
+      })
     }),
     UsersModule,
     AuthModule,

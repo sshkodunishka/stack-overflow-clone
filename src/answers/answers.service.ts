@@ -65,36 +65,38 @@ export class AnswersService {
     id: number,
     rating: string,
   ): Promise<boolean> {
-    const user = 1;
-    const vote = JSON.parse(rating.toLowerCase()) ? 1 : -1;
+    const vote: number = JSON.parse(rating.toLowerCase()) ? 1 : -1;
+    const event: Answer = await this.answerRepository.findOneBy({ id })
+    let ratingObj: any;
+    let index: number = 0
+    event.ratingArr.map((e, i) => {
+      if(e.userId == userId + ""){
+        index += i
+        ratingObj = e
+      }
+    })
 
-    const event = await this.answerRepository.query(
-      `SELECT * FROM answer WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`,
-    );
-
-    if (!event.length) {
+    if (!ratingObj) {
       await this.answerRepository.query(
-        `UPDATE answer SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`,
+        `UPDATE answer SET Rating = Rating + ${vote}, "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`,
       );
       return true;
     }
-    /*
-    if (event.rating == 1 && vote == -1) {
-      await this.answeRatingRepository.save({ ...event, rating: 0 });
+
+    if ((ratingObj.vote == "1" && vote == -1) || (ratingObj.vote == "-1" && vote == 1)) {
+      await this.answerRepository.query(
+        `UPDATE answer SET Rating = Rating + ${vote}, "ratingArr" = jsonb_set("ratingArr", '{${index}, vote}', '"0"', false)  WHERE id = ${id}`,
+      );
       return true;
     }
 
-    if (event.rating == -1 && vote == 1) {
-      await this.answeRatingRepository.save({ ...event, rating: 0 });
+    if (ratingObj.vote == "0") {
+      await this.answerRepository.query(
+        `UPDATE answer SET Rating = Rating + ${vote}, "ratingArr" = jsonb_set("ratingArr", '{${index}, vote}', '"${vote}"', false)  WHERE id = ${id}`,
+      );
       return true;
     }
 
-    if (event.rating == 0) {
-      await this.answeRatingRepository.save({ ...event, rating: vote });
-      return true;
-    }
     return false;
-  }
-  */
   }
 }
