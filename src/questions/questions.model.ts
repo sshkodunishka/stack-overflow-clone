@@ -9,7 +9,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -27,16 +27,16 @@ export class Question {
   @ManyToOne(() => User, (user) => user.questions)
   user: User;
 
-  @Column({default : 0})
+  @Column({ default: 0 })
   rating: number;
 
-  @Column(({
+  @Column({
     type: 'jsonb',
     array: false,
     default: () => "'[]'",
     nullable: false,
-  }))
-  ratingArr: Array<{ userId: string, vote: string }>;
+  })
+  ratingArr: Array<{ userId: string; vote: string }>;
 
   @ApiProperty({ example: 'Заголовок', description: 'Заголовок вопроса' })
   @Column({ default: 'title' })

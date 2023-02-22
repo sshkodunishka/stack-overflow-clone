@@ -40,8 +40,8 @@ export class AnswersController {
   @Roles('user')
   @UseGuards(JwtAuthGuard)
   @Post()
-  add(@Body() dto: CreateAnswerDto) {
-    return this.answerService.add(dto);
+  add(@Body() dto: CreateAnswerDto, @Req() req: any) {
+    return this.answerService.add(dto, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -49,8 +49,8 @@ export class AnswersController {
   voteAnswer(
     @Param('id') id: number,
     @Query('rating') rating: string,
-    @Req() user: any
-  ){
+    @Req() user: any,
+  ) {
     return this.answerService.voteAnswer(user.user.id, id, rating);
   }
 }

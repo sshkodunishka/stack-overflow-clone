@@ -5,6 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Answer } from './answers.model';
 import { CreateAnswerDto } from './dto/create-answer.dto';
+import { User } from 'src/users/users.model';
 
 @Injectable()
 export class AnswersService {
@@ -49,21 +50,32 @@ export class AnswersService {
     return true;
   }
 
-  async add(dto: CreateAnswerDto): Promise<Answer> {
-    const user = await this.userService.getUserById(dto.userId);
+  async add(dto: CreateAnswerDto, userId: number): Promise<Answer> {
     const question = await this.questionService.findOne(dto.questionId);
-    const res = await this.answerRepository.save({ ...dto, user, question });
-    return res;
+    const answer = await this.answerRepository.save({
+      ...dto,
+      question,
+      user: { id: userId } as User,
+    });
+    return answer;
   }
 
-  async voteAnswer(userId: number, id: number, rating: string): Promise<boolean> {
+  async voteAnswer(
+    userId: number,
+    id: number,
+    rating: string,
+  ): Promise<boolean> {
     const user = 1;
     const vote = JSON.parse(rating.toLowerCase()) ? 1 : -1;
 
-    const event = await this.answerRepository.query(`SELECT * FROM answer WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`);
-    
+    const event = await this.answerRepository.query(
+      `SELECT * FROM answer WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`,
+    );
+
     if (!event.length) {
-      await this.answerRepository.query(`UPDATE answer SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`);
+      await this.answerRepository.query(
+        `UPDATE answer SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`,
+      );
       return true;
     }
     /*
