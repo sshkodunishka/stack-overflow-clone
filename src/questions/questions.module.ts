@@ -13,13 +13,7 @@ import { RolesModule } from '../roles/roles.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Question,
-      Tag,
-      Answer,
-      User,
-      Role,
-    ]),
+    TypeOrmModule.forFeature([Question, Tag, Answer, User, Role]),
     TagsModule,
     AuthModule,
     RolesModule,

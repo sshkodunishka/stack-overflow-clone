@@ -21,7 +21,6 @@ import { RolesGuard } from 'src/roles/roles.guards';
 export class TagsController {
   constructor(private tagsService: TagsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Все ярлыки' })
   @ApiResponse({ status: 200, type: [Tag] })
   @Get()
@@ -49,7 +48,6 @@ export class TagsController {
     return this.tagsService.remove(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Получить один ярлык' })
   @ApiResponse({ status: 200, type: Tag })
   @Get('/:id')
@@ -57,7 +55,6 @@ export class TagsController {
     return this.tagsService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Все вопросы по одному ярлыку' })
   @ApiResponse({ status: 200, type: [Tag] })
   @Get('/questions/:id')

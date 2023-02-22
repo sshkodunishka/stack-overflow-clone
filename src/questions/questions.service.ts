@@ -13,7 +13,6 @@ export class QuestionsService {
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
     private tagService: TagsService,
-    // private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
@@ -79,7 +78,6 @@ export class QuestionsService {
   }
 
   async add(dto: CreateQuestionDto, userId: number): Promise<Question> {
-    // const userId = await this.usersService.getUserById(dto.)
     const tag = await this.tagService.findOne(dto.tagId);
     const question = await this.questionRepository.create({
       ...dto,
@@ -102,10 +100,14 @@ export class QuestionsService {
     rating: string,
   ): Promise<boolean> {
     const vote = JSON.parse(rating.toLowerCase()) ? 1 : -1;
-    const event = await this.questionRepository.query(`SELECT * FROM question WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`);
-    
+    const event = await this.questionRepository.query(
+      `SELECT * FROM question WHERE id = ${id} AND "ratingArr"::json->>'userId'='${userId}'`,
+    );
+
     if (!event.length) {
-      await this.questionRepository.query(`UPDATE question SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`);
+      await this.questionRepository.query(
+        `UPDATE question SET "ratingArr" = "ratingArr" || '[{"userId":"${userId}","vote":"${vote}"}]'::jsonb  WHERE id = ${id}`,
+      );
       return true;
     }
 
@@ -127,5 +129,4 @@ export class QuestionsService {
     */
     return false;
   }
-
 }
