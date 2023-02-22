@@ -13,9 +13,9 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Tag } from './tags.model';
 import { TagsService } from './tags.service';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
-import { Roles } from 'src/roles/roles.decorator';
-import { RolesGuard } from 'src/roles/roles.guards';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Roles } from '../roles/roles.decorator';
+import { RolesGuard } from '../roles/roles.guards';
 import { title } from 'process';
 
 @ApiTags('Ярлыки')

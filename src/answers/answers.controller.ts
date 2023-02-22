@@ -13,9 +13,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Answer } from './answers.model';
 import { AnswersService } from './answers.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
-import { RolesGuard } from 'src/roles/roles.guards';
-import { Roles } from 'src/roles/roles.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { RolesGuard } from '../roles/roles.guards';
+import { Roles } from '../roles/roles.decorator';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @ApiTags('Ответы')
 @Controller('answers')

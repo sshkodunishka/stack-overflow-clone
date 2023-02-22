@@ -8,8 +8,8 @@ import {
   Column,
   ManyToMany,
 } from 'typeorm';
-import { User } from 'src/users/users.model';
-import { Question } from 'src/questions/questions.model';
+import { User } from '../users/users.model';
+import { Question } from '../questions/questions.model';
 
 @Entity()
 export class Answer {

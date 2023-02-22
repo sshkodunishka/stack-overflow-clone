@@ -4,8 +4,8 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users.model';
-import { AuthModule } from 'src/auth/auth.module';
-import { Question } from 'src/questions/questions.model';
+import { AuthModule } from '../auth/auth.module';
+import { Question } from '../questions/questions.model';
 import { Role } from '../roles/roles.model';
 
 @Module({

@@ -11,6 +11,8 @@ import { QuestionsModule } from './questions/questions.module';
 import { AnswersModule } from './answers/answers.module';
 import { RedisModule } from './redis/redis.module';
 import { RolesModule } from './roles/roles.module';
+import { JwtAuthGuard } from './auth/jwt.auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 import { AddColumnTag1677060963784 } from 'config/migrations/1677060963784-AddColumnTag';
 
 @Module({
@@ -41,7 +43,8 @@ import { AddColumnTag1677060963784 } from 'config/migrations/1677060963784-AddCo
     RolesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,{provide: APP_GUARD,
+    useClass: JwtAuthGuard,},  JwtAuthGuard,],
 })
 
 export class AppModule {}

@@ -5,8 +5,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { ApiTags,ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './users.model';
-import { RolesGuard } from 'src/roles/roles.guards';
-import { Roles } from 'src/roles/roles.decorator';
+import { RolesGuard } from '../roles/roles.guards';
+import { Roles } from '../roles/roles.decorator';
 
 @ApiTags('Users')
 @Controller('users')

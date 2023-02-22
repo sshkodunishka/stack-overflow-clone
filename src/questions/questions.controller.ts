@@ -11,12 +11,12 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
 import { QuestionsService } from './questions.service';
-import { RolesGuard } from 'src/roles/roles.guards';
-import { Roles } from 'src/roles/roles.decorator';
+import { RolesGuard } from '../roles/roles.guards';
+import { Roles } from '../roles/roles.decorator';
 
 @ApiTags('Вопросы')
 @Controller('questions')

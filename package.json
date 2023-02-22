@@ -37,6 +37,7 @@
     "bcrypt": "^5.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
+    "jest-mock": "^29.4.3",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.9.0",

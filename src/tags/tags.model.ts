@@ -1,4 +1,4 @@
-import { Question } from 'src/questions/questions.model';
+import { Question } from '../questions/questions.model';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
