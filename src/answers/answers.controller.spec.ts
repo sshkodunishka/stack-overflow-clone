@@ -1,18 +1,43 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { CanActivate } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { RolesGuard } from '../roles/roles.guards';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Repository } from 'typeorm';
 import { AnswersController } from './answers.controller';
+import { AnswersService } from './answers.service';
+import { Answer } from './answers.model';
 
 describe('AnswersController', () => {
-  let controller: AnswersController;
+  let answersController: AnswersController;
+  let answersService: AnswersService;
+  let answersRepository: Repository<Answer>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const mockGuard: CanActivate = {
+      canActivate: jest.fn(() => true),
+    };
+
+    const moduleRef = await Test.createTestingModule({
       controllers: [AnswersController],
-    }).compile();
+      providers: [
+        AnswersService,
+        {
+          provide: getRepositoryToken(Answer),
+          useClass: Repository,
+        },
+      ],
+    })
+      .overrideGuard(RolesGuard)
+      .useValue(mockGuard)
+      .overrideGuard(JwtAuthGuard)
+      .useValue(mockGuard)
+      .compile();
 
-    controller = module.get<AnswersController>(AnswersController);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+    answersService = moduleRef.get<AnswersService>(AnswersService);
+    answersController = moduleRef.get<AnswersController>(AnswersController);
+    answersRepository = moduleRef.get<Repository<Answer>>(
+      getRepositoryToken(Answer),
+    );
   });
 });

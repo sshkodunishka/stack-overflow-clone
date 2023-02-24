@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Answer } from 'src/answers/answers.model';
-import { Tag } from 'src/tags/tags.model';
-import { User } from 'src/users/users.model';
+import { Answer } from '../answers/answers.model';
+import { Tag } from '../tags/tags.model';
+import { User } from '../users/users.model';
 import {
   Entity,
   PrimaryGeneratedColumn,

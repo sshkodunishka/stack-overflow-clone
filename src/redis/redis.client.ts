@@ -13,10 +13,6 @@ export class RedisClient implements OnModuleInit {
       },
     });
 
-    this.client.on('connect', () => {
-      console.log(`Redis connection established`);
-    });
-
     this.client.on('error', (error) => {
       console.error(`Redis error, service degraded: ${error}`);
     });
