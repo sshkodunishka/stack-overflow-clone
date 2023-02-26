@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QuestionsService } from 'src/questions/questions.service';
+import { QuestionsService } from '../questions/questions.service';
 import { Repository } from 'typeorm';
 import { Answer } from './answers.model';
 import { CreateAnswerDto } from './dto/create-answer.dto';
