@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { Answer } from 'src/answers/answers.model';
-import { Question } from 'src/questions/questions.model';
+import { Answer } from '../answers/answers.model';
+import { Question } from '../questions/questions.model';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { Role } from '../roles/roles.model';
 
