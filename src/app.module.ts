@@ -12,21 +12,23 @@ import { AnswersModule } from './answers/answers.module';
 import { RedisModule } from './redis/redis.module';
 import { RolesModule } from './roles/roles.module';
 import { AddColumnTag1677060963784 } from 'config/migrations/1677060963784-AddColumnTag';
+import { databaseConfig, dbTypesConfig, nodeEnvConstant } from 'config/partitioned-config';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forRoot({
-        envFilePath: `.${process.env.NODE_ENV}.env`
+        isGlobal: true,
+        envFilePath: `.${nodeEnvConstant}.env`,
       })],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USER'),
-        password: configService.get('POSTGRES_PASSWORD'),
-        database: configService.get('POSTGRES_DB'),
+      useFactory: () => ({
+        type: dbTypesConfig.POSTGRES,
+        username: databaseConfig.POSTGRES_USER,
+        password: databaseConfig.POSTGRES_PASSWORD,
+        port: databaseConfig.POSTGRES_PORT,
+        database: databaseConfig.POSTGRES_DB,
+        host: databaseConfig.POSTGRES_HOST,
         entities: [],
         autoLoadEntities: true,
         migrations: [AddColumnTag1677060963784]
@@ -43,5 +45,6 @@ import { AddColumnTag1677060963784 } from 'config/migrations/1677060963784-AddCo
   controllers: [AppController],
   providers: [AppService],
 })
+
 
 export class AppModule {}
