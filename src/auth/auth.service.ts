@@ -4,17 +4,17 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UsersService } from 'users/users.service';
+import { CreateUserDto } from 'users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt/dist';
 import * as bcrypt from 'bcrypt';
-import { User } from '../users/users.model';
-import { RedisClient } from '../redis/redis.client';
+import { User } from 'users/users.model';
+import { RedisClient } from 'redis/redis.client';
 import { v4 as uuidv4 } from 'uuid';
-import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { RolesService } from '../roles/roles.service';
-import { Roles } from 'src/roles/role.enum';
+import { RefreshTokenDto } from 'users/dto/refresh-token.dto';
+import { LoginUserDto } from 'users/dto/login-user.dto';
+import { RolesService } from 'roles/roles.service';
+import { Roles } from 'roles/role.enum';
 
 @Injectable()
 export class AuthService {

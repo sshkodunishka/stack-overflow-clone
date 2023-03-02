@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Answer } from 'src/answers/answers.model';
-import { Tag } from 'src/tags/tags.model';
-import { User } from 'src/users/users.model';
+import { Answer } from 'answers/answers.model';
+import { Tag } from 'tags/tags.model';
+import { User } from 'users/users.model';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -18,18 +18,22 @@ export class Question {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty({ example: '[]', description: 'Ярлык' })
   @ManyToOne(() => Tag, (tag) => tag.questions)
   tag: Tag;
 
+  @ApiProperty({ example: '[]', description: 'Ответы' })
   @OneToMany(() => Answer, (answer) => answer.question)
   answers: Answer[];
-
+  
   @ManyToOne(() => User, (user) => user.questions)
   user: User;
 
+  @ApiProperty({ example: '0', description: 'Рейтинг' })
   @Column({ default: 0 })
   rating: number;
 
+  @ApiProperty({ example: '[]', description: 'Массив проголосовавших' })
   @Column({
     type: 'jsonb',
     nullable: false,

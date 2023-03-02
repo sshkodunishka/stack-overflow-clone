@@ -6,10 +6,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Column,
-  ManyToMany,
 } from 'typeorm';
-import { User } from 'src/users/users.model';
-import { Question } from 'src/questions/questions.model';
+import { User } from 'users/users.model';
+import { Question } from 'questions/questions.model';
 
 @Entity()
 export class Answer {
@@ -17,16 +16,18 @@ export class Answer {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty({ example: '{}', description: 'Вопрос' })
   @ManyToOne(() => Question, (question) => question.answers)
   question: Question;
 
   @ManyToOne(() => User, (user) => user.answers)
   user: User;
 
-  @ApiProperty({ example: '0', description: 'Рэйтинг' })
+  @ApiProperty({ example: '0', description: 'Рейтинг' })
   @Column({ default: 0 })
   rating: number;
 
+  @ApiProperty({ example: '[]', description: 'Массив проголосовавших' })
   @Column({
     type: 'jsonb',
     nullable: false,

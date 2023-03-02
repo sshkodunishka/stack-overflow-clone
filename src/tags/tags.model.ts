@@ -1,4 +1,4 @@
-import { Question } from 'src/questions/questions.model';
+import { Question } from 'questions/questions.model';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -16,6 +16,7 @@ export class Tag {
   @Column({ nullable: false })
   description: string;
 
+  @ApiProperty({ example: '[]', description: 'Вопросы' })
   @OneToMany(() => Question, (question) => question.tag)
   questions: Question[];
 }

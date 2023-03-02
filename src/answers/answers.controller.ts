@@ -13,9 +13,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Answer } from './answers.model';
 import { AnswersService } from './answers.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
-import { RolesGuard } from 'src/roles/roles.guards';
-import { Roles } from 'src/roles/roles.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { RolesGuard } from 'roles/roles.guards';
+import { Roles } from 'roles/roles.decorator';
+import { JwtAuthGuard } from 'auth/jwt.auth.guard';
 
 @ApiTags('Ответы')
 @Controller('answers')
@@ -24,7 +24,7 @@ export class AnswersController {
 
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Удалить ответы' })
-  @ApiResponse({ status: 200, type: Answer })
+  @ApiResponse({ status: 200, description: 'true' })
   @Delete('/:id')
   remove(@Req() req: any, @Param('id') id: number) {
     return this.answerService.remove(id, req.user);
@@ -32,6 +32,8 @@ export class AnswersController {
 
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
+  @ApiOperation({ summary: 'Редактировать ответ' })
+  @ApiResponse({ status: 200, description: 'true' })
   edit(@Req() req: any, @Param('id') id: number, @Body() dto: CreateAnswerDto) {
     return this.answerService.edit(id, req.user, dto);
   }
@@ -40,17 +42,21 @@ export class AnswersController {
   @Roles('user')
   @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiOperation({ summary: 'Создать вопрос' })
+  @ApiResponse({ status: 200, type: Answer })
   add(@Body() dto: CreateAnswerDto, @Req() req: any) {
     return this.answerService.add(dto, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/:id/vote')
+  @ApiOperation({ summary: 'Голосование' })
+  @ApiResponse({ status: 200, description: 'true' })
   voteAnswer(
     @Param('id') id: number,
     @Query('rating') rating: string,
-    @Req() user: any,
+    @Req() req: any,
   ) {
-    return this.answerService.voteAnswer(user.user.id, id, rating);
+    return this.answerService.voteAnswer(req.user.id, id, rating);
   }
 }

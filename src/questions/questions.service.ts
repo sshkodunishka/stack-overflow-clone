@@ -1,19 +1,16 @@
-import { User } from 'src/users/users.model';
+import { User } from 'users/users.model';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TagsService } from 'src/tags/tags.service';
 import { Repository } from 'typeorm';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
+import { Tag } from 'tags/tags.model';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
-    private tagService: TagsService,
-    private jwtService: JwtService,
   ) {}
 
   async findAll(): Promise<Question[]> {
@@ -78,11 +75,12 @@ export class QuestionsService {
   }
 
   async add(dto: CreateQuestionDto, userId: number): Promise<Question> {
-    const tag = await this.tagService.findOne(dto.tagId);
     const question = await this.questionRepository.create({
       ...dto,
-      tag,
+      tag: { id: dto.tagId} as Tag,
       user: { id: userId } as User,
+      rating: 0,
+      ratingArr: []
     });
     await this.questionRepository.save(question);
     return question;
@@ -100,15 +98,15 @@ export class QuestionsService {
     rating: string,
   ): Promise<boolean> {
     const vote: number = JSON.parse(rating.toLowerCase()) ? 1 : -1;
-    const event: Question = await this.questionRepository.findOneBy({ id })
+    const event: Question = await this.questionRepository.findOneBy({ id });
     let ratingObj: any;
-    let index: number = 0
+    let index = 0;
     event.ratingArr.map((e, i) => {
-      if(e.userId == userId + ""){
-        index += i
-        ratingObj = e
+      if (e.userId == userId + '') {
+        index += i;
+        ratingObj = e;
       }
-    })
+    });
 
     if (!ratingObj) {
       await this.questionRepository.query(
@@ -117,14 +115,17 @@ export class QuestionsService {
       return true;
     }
 
-    if ((ratingObj.vote == "1" && vote == -1) || (ratingObj.vote == "-1" && vote == 1)) {
+    if (
+      (ratingObj.vote == '1' && vote == -1) ||
+      (ratingObj.vote == '-1' && vote == 1)
+    ) {
       await this.questionRepository.query(
         `UPDATE question SET Rating = Rating + ${vote}, "ratingArr" = jsonb_set("ratingArr", '{${index}, vote}', '"0"', false)  WHERE id = ${id}`,
       );
       return true;
     }
 
-    if (ratingObj.vote == "0") {
+    if (ratingObj.vote == '0') {
       await this.questionRepository.query(
         `UPDATE question SET Rating = Rating + ${vote}, "ratingArr" = jsonb_set("ratingArr", '{${index}, vote}', '"${vote}"', false)  WHERE id = ${id}`,
       );

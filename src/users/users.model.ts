@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { Answer } from 'src/answers/answers.model';
-import { Question } from 'src/questions/questions.model';
+import { Answer } from 'answers/answers.model';
+import { Question } from 'questions/questions.model';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { Role } from '../roles/roles.model';
+import { Role } from 'roles/roles.model';
 
 @Entity()
 export class User {
@@ -27,12 +27,15 @@ export class User {
   @Column({ default: "lastName" })
   lastName: string;
 
+  @ApiProperty({ example: '[]', description: 'Вопросы' })
   @OneToMany(()=>Question, (question)=>question.user)
   questions: Question[]
 
+  @ApiProperty({ example: '[]', description: 'Ответы' })
   @OneToMany(()=>Answer, (answer)=>answer.user)
   answers: Answer[]
 
+  @ApiProperty({ example: 'Admin', description: 'Роль' })
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
 }
