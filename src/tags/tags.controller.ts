@@ -12,9 +12,9 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { Tag } from './tags.model';
 import { TagsService } from './tags.service';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Roles } from '../roles/roles.decorator';
-import { RolesGuard } from '../roles/roles.guards';
+import { JwtAuthGuard } from 'auth/jwt.auth.guard';
+import { Roles } from 'roles/roles.decorator';
+import { RolesGuard } from 'roles/roles.guards';
 
 @ApiTags('Ярлыки')
 @Controller('tags')
@@ -42,7 +42,7 @@ export class TagsController {
   @Roles('admin')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Удалить ярлык' })
-  @ApiResponse({ status: 200, type: Tag })
+  @ApiResponse({ status: 200, description: 'true' })
   @Delete('/:id')
   remove(@Param('id') id: number) {
     return this.tagsService.remove(id);
@@ -56,7 +56,7 @@ export class TagsController {
   }
 
   @ApiOperation({ summary: 'Все вопросы по одному ярлыку' })
-  @ApiResponse({ status: 200, type: [Tag] })
+  @ApiResponse({ status: 200, type: Tag })
   @Get('/questions/:title')
   getQuestions(@Param('title') title: string) {
     return this.tagsService.findAllQuestion(title);
@@ -66,7 +66,7 @@ export class TagsController {
   @Roles('admin')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Редактировать ярлык' })
-  @ApiResponse({ status: 200, type: Tag })
+  @ApiResponse({ status: 200, description: 'true' })
   @Put('/:id')
   edit(@Param('id') id: number, @Body() tagDto: CreateTagDto) {
     return this.tagsService.editTag(id, tagDto);

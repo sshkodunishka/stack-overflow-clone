@@ -1,12 +1,12 @@
-import { AuthModule } from './../auth/auth.module';
+import { AuthModule } from 'auth/auth.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Question } from 'src/questions/questions.model';
+import { Question } from 'questions/questions.model';
 import { TagsController } from './tags.controller';
 import { Tag } from './tags.model';
 import { TagsService } from './tags.service';
-import { Role } from '../roles/roles.model';
-import { RolesModule } from '../roles/roles.module';
+import { Role } from 'roles/roles.model';
+import { RolesModule } from 'roles/roles.module';
 
 @Module({
   controllers: [TagsController],

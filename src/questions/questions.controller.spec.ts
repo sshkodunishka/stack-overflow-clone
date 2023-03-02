@@ -1,147 +1,146 @@
 import { CanActivate } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { RolesGuard } from '../roles/roles.guards';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Repository } from 'typeorm';
+import { Test, TestingModule } from '@nestjs/testing';
+import { RolesGuard } from 'roles/roles.guards';
+import { JwtAuthGuard } from 'auth/jwt.auth.guard';
+import { Question } from 'questions/questions.model';
+import { User } from 'users/users.model';
 import { QuestionsController } from './questions.controller';
+import { Answer } from 'answers/answers.model';
+import { CreateQuestionDto } from './dto/create-question.dto';
 import { QuestionsService } from './questions.service';
-import { Question } from './questions.model';
-import { Tag } from '../tags/tags.model';
-import { TagsService } from '../tags/tags.service';
-import { User } from '../users/users.model';
+import { Tag } from 'tags/tags.model';
 
-describe('QuestionsController', () => {
-  let questionsController: QuestionsController;
-  let questionsService: QuestionsService;
-  let questionsRepository: Repository<Question>;
+const user:any = {
+  id: 1,
+  login: 'test',
+  password: 'test',
+  firstName: 'test',
+  lastName: 'test',
+  questions: [],
+  answers: [],
+  role: { id: 1, roleName: 'test', users: [] }
+}
 
+const httpMocks = require("node-mocks-http");
+
+describe("QuestionsController", () => {
+  let questionController: QuestionsController;
+
+  const mockGuard: CanActivate = {
+    canActivate: jest.fn(() => true),
+  };
+
+  const mockRequest = httpMocks.createRequest();
+  mockRequest.user = {...user};
+
+  const mockQuestion: Question = {
+    id: 1,
+    answers: [{} as Answer],
+    tag: {} as Tag,
+    user: {} as User,
+    rating: 0,
+    ratingArr: [],
+    title: 'test',
+    description: 'test',
+    created: new Date(),
+    update: new Date(),
+  };
+
+  const mockQuestions: [Question] = [mockQuestion]
+
+  const mockQuestionService = {
+    add: jest
+      .fn()
+      .mockImplementation((dto: CreateQuestionDto, userId: number) => {
+        return {
+          ...mockQuestion
+        };
+      }),
+    edit: jest
+      .fn()
+      .mockImplementation((id: number, user: User,dto: CreateQuestionDto) => {
+        return false || true;
+    }),
+    remove: jest
+      .fn()
+      .mockImplementation((id: number, user: User) => {
+        return false || true;
+    }),
+    voteQuestion: jest
+      .fn()
+      .mockImplementation((userId: number, id: number, rating: string) => {
+        return false || true;
+    }),
+    sortBytags: jest
+      .fn()
+      .mockImplementation(() => {
+        return [...mockQuestions]
+    }),
+    findAll: jest
+      .fn()
+      .mockImplementation(() => {
+        return [...mockQuestions]
+    }), 
+    findAllAnswers: jest
+      .fn()
+      .mockImplementation((id: number) => {
+        return {...mockQuestion}
+    })
+  };
+
+  const mockQuestionDto = {
+    title: 'test',
+    description: 'test',
+    tagId: 1
+  }
+
+  // create fake module
   beforeEach(async () => {
-    const mockGuard: CanActivate = {
-      canActivate: jest.fn(() => true),
-    };
-
-    const moduleRef = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       controllers: [QuestionsController],
       providers: [
-        QuestionsService,
-        {
-          provide: getRepositoryToken(Question),
-          useClass: Repository,
-        },
-        TagsService,
-        { provide: getRepositoryToken(Tag), useClass: Repository },
+        QuestionsService
       ],
     })
-      .overrideGuard(RolesGuard)
-      .useValue(mockGuard)
-      .overrideGuard(JwtAuthGuard)
-      .useValue(mockGuard)
-      .compile();
+    .overrideGuard(RolesGuard)
+    .useValue(mockGuard)
+    .overrideGuard(JwtAuthGuard)
+    .useValue(mockGuard)
+    .overrideProvider(QuestionsService)
+    .useValue(mockQuestionService)
+    .compile();
 
-    questionsService = moduleRef.get<QuestionsService>(QuestionsService);
-    questionsController =
-      moduleRef.get<QuestionsController>(QuestionsController);
-    questionsRepository = moduleRef.get<Repository<Question>>(
-      getRepositoryToken(Question),
-    );
+    questionController = moduleRef.get<QuestionsController>(QuestionsController);
   });
 
-  describe('getAll', () => {
-    it('should return an array of Questions', async () => {
-      const result = [
-        {
-          id: 1,
-          tag: { id: 1, title: 'test', description: 'test', questions: [] },
-          answers: [],
-          user: {
-            id: 1,
-            login: 'test',
-            password: 'test',
-            firstName: 'test',
-            lastName: 'test',
-            questions: [],
-            answers: [],
-            role: { id: 1, roleName: 'test', users: [] },
-          },
-          rating: 0,
-          ratingArr: [],
-          title: 'test',
-          description: 'test',
-          created: new Date(),
-          update: new Date(),
-        },
-      ];
-      jest.spyOn(questionsRepository, 'find').mockResolvedValueOnce(result);
-
-      expect(await questionsController.getAll()).toBe(result);
+  it("should create a question", () => {
+    expect(questionController.add(mockQuestionDto, mockRequest)).toEqual({
+      id: expect.any(Number),
+      ...mockQuestion,
     });
   });
-  describe('getAnswers', () => {
-    it('should return an array of Answers', async () => {
-      const result = [
-        {
-          id: 1,
-          tag: { id: 1, title: 'test', description: 'test', questions: [] },
-          answers: [
-            {
-              id: 1,
-              question: {} as Question,
-              user: {} as User,
-              rating: 0,
-              ratingArr: [],
-              description: 'test',
-              created: new Date(),
-              update: new Date(),
-            },
-          ],
-          user: {
-            id: 1,
-            login: 'test',
-            password: 'test',
-            firstName: 'test',
-            lastName: 'test',
-            questions: [],
-            answers: [],
-            role: { id: 1, roleName: 'test', users: [] },
-          },
-          rating: 0,
-          ratingArr: [],
-          title: 'test',
-          description: 'test',
-          created: new Date(),
-          update: new Date(),
-        },
-      ];
-      jest.spyOn(questionsRepository, 'find').mockResolvedValueOnce(result);
 
-      expect(await questionsController.getAll()).toBe(result);
-    });
+  it("should update a question", () => {
+    expect(questionController.edit(mockRequest, 1, mockQuestionDto)).toEqual(true);
   });
-  describe('add', () => {
-    it('should add a Question', async () => {
-      const body = {
-        title: 'test',
-        description: 'test',
-        tagId: 1,
-      };
 
-      const result = {
-        id: 1,
-        tag: {} as Tag,
-        answers: [],
-        user: { id: 1 } as User,
-        rating: 0,
-        ratingArr: [],
-        title: 'test',
-        description: 'test',
-        created: new Date(),
-        update: new Date(),
-      };
-      const id = result.user.id;
-      jest.spyOn(questionsRepository, 'save').mockResolvedValueOnce(result);
+  it("should remove a question", () => {
+    expect(questionController.remove(mockRequest, 1)).toEqual(true);
+  });
 
-      expect(await questionsController.add(body, id)).toBe(result);
-    });
+  it("should vote a question", () => {
+    expect(questionController.voteQuestion(1, 'true', mockRequest)).toEqual(true);
+  });
+
+  it("should sort questions by tag", () => {
+    expect(questionController.sortBytags()).toEqual(mockQuestions);
+  });
+
+  it("should get all questions", () => {
+    expect(questionController.getAll()).toEqual(mockQuestions);
+  });
+
+  it("should get all answers to question", () => {
+    expect(questionController.getAnswers(1)).toEqual(mockQuestion);
   });
 });

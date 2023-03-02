@@ -4,7 +4,7 @@ import { User } from './users.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Role } from '../roles/roles.model';
+import { Role } from 'roles/roles.model';
 
 export type user = User
 

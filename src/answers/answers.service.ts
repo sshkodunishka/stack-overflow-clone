@@ -1,17 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QuestionsService } from '../questions/questions.service';
 import { Repository } from 'typeorm';
 import { Answer } from './answers.model';
 import { CreateAnswerDto } from './dto/create-answer.dto';
-import { User } from 'src/users/users.model';
+import { User } from 'users/users.model';
+import { Question } from 'questions/questions.model';
 
 @Injectable()
 export class AnswersService {
   constructor(
     @InjectRepository(Answer)
-    private answerRepository: Repository<Answer>,
-    private questionService: QuestionsService,
+    private answerRepository: Repository<Answer>
   ) {}
 
   async remove(id: number, user: any): Promise<boolean> {
@@ -49,11 +48,12 @@ export class AnswersService {
   }
 
   async add(dto: CreateAnswerDto, userId: number): Promise<Answer> {
-    const question = await this.questionService.findOne(dto.questionId);
     const answer = await this.answerRepository.save({
       ...dto,
-      question,
+      question: { id: dto.questionId} as Question,
       user: { id: userId } as User,
+      rating: 0,
+      ratingArr: []
     });
     return answer;
   }

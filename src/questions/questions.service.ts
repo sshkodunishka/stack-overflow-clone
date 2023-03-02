@@ -1,17 +1,16 @@
-import { User } from '../users/users.model';
+import { User } from 'users/users.model';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TagsService } from '../tags/tags.service';
 import { Repository } from 'typeorm';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './questions.model';
+import { Tag } from 'tags/tags.model';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
-    private tagService: TagsService, // private jwtService: JwtService,
   ) {}
 
   async findAll(): Promise<Question[]> {
@@ -76,11 +75,12 @@ export class QuestionsService {
   }
 
   async add(dto: CreateQuestionDto, userId: number): Promise<Question> {
-    const tag = await this.tagService.findOne(dto.tagId);
     const question = await this.questionRepository.create({
       ...dto,
-      tag,
+      tag: { id: dto.tagId} as Tag,
       user: { id: userId } as User,
+      rating: 0,
+      ratingArr: []
     });
     await this.questionRepository.save(question);
     return question;

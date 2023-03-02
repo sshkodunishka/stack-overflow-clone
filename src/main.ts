@@ -2,10 +2,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger'
-import { nestConfig } from 'config/partitioned-config';
 
 async function bootstrap() {
-  const PORT = nestConfig.PORT || 5000
+  const PORT = process.env.PORT || 5000
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()

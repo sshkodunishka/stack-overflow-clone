@@ -1,26 +1,26 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from 'users/dto/create-user.dto';
 import { AuthService } from './auth.service';
-import { TokensDto } from '../users/dto/tokens.dto';
-import { User } from 'src/users/users.model';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
+import { TokensDto } from 'users/dto/tokens.dto';
+import { User } from 'users/users.model';
+import { LoginUserDto } from 'users/dto/login-user.dto';
+import { RefreshTokenDto } from 'users/dto/refresh-token.dto';
 import { JwtAuthGuard } from './jwt.auth.guard';
 
-@ApiTags('Authorization')
+@ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @ApiOperation({ summary: 'Login' })
+  @ApiOperation({ summary: 'Вход' })
   @ApiResponse({ status: 200, type: TokensDto })
   @Post('/login')
-  login(@Body() UserDto: LoginUserDto) {
-    return this.authService.login(UserDto);
+  login(@Body() userDto: LoginUserDto) {
+    return this.authService.login(userDto);
   }
 
-  @ApiOperation({ summary: 'Registration' })
+  @ApiOperation({ summary: 'Регистрация' })
   @ApiResponse({ status: 200, type: User })
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
@@ -35,7 +35,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Logout' })
+  @ApiOperation({ summary: 'Выход' })
   @ApiResponse({ status: 200 })
   @Get('/logout')
   logout(@Req() req: any) {
